@@ -164,6 +164,12 @@
       color: #00ff00;
     }
 
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
     @media screen and (max-width: 600px) {
       .card-container {
         width: 90vw;
@@ -219,10 +225,12 @@
         <input type="text" name="city" placeholder="Alhsaa" oninput="toggleDirection(this)" />
 
         <label><span>Phone Number</span><span>رقم الجوال</span></label>
-        <input type="tel" name="phone" placeholder="0539300375" oninput="toggleDirection(this)" />
+        <input type="tel" name="phone" placeholder="0539300375" oninput="validatePhone(this)" />
 
         <label><span>Coupon Code</span><span>رقم القسيمة</span></label>
-        <input type="text" name="coupon" placeholder="JAB68997" oninput="toggleDirection(this)" />
+        <input type="text" name="coupon" placeholder="JAB68997" oninput="validateCoupon(this)" />
+
+        <div id="errorMessage" class="error-message"></div>
 
         <button type="submit">إرسال →</button>
       </form>
@@ -243,7 +251,7 @@
 </div>
 
 <!-- Load SheetJS library from CDN -->
-<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js "></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script> 
 
 <script>
   // Function to toggle RTL/LTR
@@ -286,6 +294,22 @@
   // Sound on success
   const successSound = new Audio('success-sound.mp3'); // Make sure this file exists
 
+  // Validate Phone Input
+  function validatePhone(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+  }
+
+  // Validate Coupon Code (English letters and numbers only)
+  function validateCoupon(input) {
+    const regex = /^[a-zA-Z0-9]*$/;
+    if (!regex.test(input.value)) {
+      input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+      document.getElementById("errorMessage").textContent = "رقم القسيمة يقبل الأحرف الإنجليزية والأرقام فقط.";
+    } else {
+      document.getElementById("errorMessage").textContent = "";
+    }
+  }
+
   // Handling form submission
   const form = document.getElementById("registrationForm");
   const successPage = document.getElementById("successPage");
@@ -301,11 +325,44 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    const errorMessage = document.getElementById("errorMessage");
+    const phoneInput = form.phone;
+    const couponInput = form.coupon;
+
+    // Validation checks
+    if (form.name.value.trim() === "") {
+      errorMessage.textContent = "الرجاء إدخال الاسم";
+      return;
+    }
+
+    if (form.city.value.trim() === "") {
+      errorMessage.textContent = "الرجاء إدخال المدينة";
+      return;
+    }
+
+    if (phoneInput.value.trim().length < 9 || !/^[0-9]+$/.test(phoneInput.value.trim())) {
+      errorMessage.textContent = "رقم الجوال يجب أن يكون أرقامًا فقط وأطول من 9 خانات";
+      return;
+    }
+
+    if (couponInput.value.trim() === "") {
+      errorMessage.textContent = "الرجاء إدخال رقم القسيمة";
+      return;
+    }
+
+    if (!/^[A-Za-z0-9]+$/.test(couponInput.value.trim())) {
+      errorMessage.textContent = "رقم القسيمة يجب أن يحتوي على أحرف إنجليزية أو أرقام فقط";
+      return;
+    }
+
+    // If all fields are valid
+    errorMessage.textContent = "";
+
     const formData = {
       الاسم: form.name.value.trim(),
       المدينة: form.city.value.trim(),
-      "رقم الجوال": form.phone.value.trim(),
-      "رقم القسيمة": form.coupon.value.trim()
+      "رقم الجوال": phoneInput.value.trim(),
+      "رقم القسيمة": couponInput.value.trim()
     };
 
     customerList.push(formData);
