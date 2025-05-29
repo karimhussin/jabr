@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>مغسلة الجبر</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden;
+      background-color: #007bff; /* Blue background */
+      color: white;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .progress-bar {
+      width: 90%;
+      max-width: 400px;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #00ff00;
+      transition: width 0.5s ease-in-out;
+    }
+
+    .card-container {
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 2px solid white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 1.5rem auto;
+      width: 400px;
+      min-height: 400px;
+      position: relative;
+      animation: tri-glow 4s infinite ease-in-out;
+      box-shadow: 0 0 15px white;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @keyframes tri-glow {
+      0%   { box-shadow: 0 0 10px white; }
+      33%  { box-shadow: 0 0 10px #00f0ff; }
+      66%  { box-shadow: 0 0 10px red; }
+      100% { box-shadow: 0 0 10px white; }
+    }
+
+    .logo {
+      max-width: 150px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      direction: rtl;
+      text-align: right;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      height: auto;
+      margin: 1rem 0;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .slider img {
+      width: 100%;
+      height: auto;
+      display: none;
+      border-radius: 20px 20px 0 0;
+      max-height: 250px;
+    }
+
+    .slider img.active {
+      display: block;
+    }
+
+    .checkmark {
+      width: 150px;
+      height: 150px;
+      border: 4px solid white;
+      border-radius: 50%;
+      margin: 1.5rem auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5rem;
+      color: #00ff00;
+    }
+
+    @media screen and (max-width: 600px) {
+      .card-container {
+        width: 90vw;
+        min-height: auto;
+        padding: 1.5rem;
+        margin: 1rem auto;
+      }
+
+      .progress-bar {
+        width: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- Page 1: Welcome Page -->
+  <div class="page active" id="welcomePage">
+    <div class="card-container">
+      <img src="logo.png" alt="لوجو الشركة" class="logo">
+      <h1>سجل الحين</h1>
+      <h2>وادخل سحب على جوائز قيمة</h2>
+
+      <div class="slider" id="imageSlider">
+        <img src="washing-image.jpg" alt="صورة غسيل 1" class="active">
+        <img src="another-image.jpg" alt="صورة غسيل 2">
+        <img src="third-image.jpg" alt="صورة غسيل 3">
+      </div>
+
+      <button onclick="showRegistrationForm()">التالي →</button>
+    </div>
+  </div>
+
+  <!-- Page 2: Registration Form Page -->
+  <div class="page" id="registrationFormPage" style="display: none;">
+    <div class="card-container">
+      <img src="logo.png" alt="لوجو الشركة" class="logo">
+      <h1>سجل الحين</h1>
+      <h2>وادخل سحب على جوائز قيمة</h2>
+
+      <form id="registrationForm">
+        <label><span>Name</span><span>الإسم</span></label>
+        <input type="text" name="name" placeholder="Hammad Al jabr" oninput="toggleDirection(this)" />
+
+        <label><span>City</span><span>المدينة</span></label>
+        <input type="text" name="city" placeholder="Alhsaa" oninput="toggleDirection(this)" />
+
+        <label><span>Phone Number</span><span>رقم الجوال</span></label>
+        <input type="tel" name="phone" placeholder="0539300375" oninput="toggleDirection(this)" />
+
+        <label><span>Coupon Code</span><span>رقم القسيمة</span></label>
+        <input type="text" name="coupon" placeholder="JAB68997" oninput="toggleDirection(this)" />
+
+        <button type="submit">إرسال →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Page 3: Success Page -->
+  <div class="page" id="successPage" style="display: none;">
+    <div class="card-container">
+      <img src="logo.png" alt="لوجو الشركة" class="logo">
+      <div class="checkmark"><span>تم</span></div>
+      <h1>مبروووك !!</h1>
+      <h2>تم تسجيلك في السحب بنجاح</h2>
+      <p>شكراً لاستخدامك مغسلة الجبر</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Load SheetJS library from CDN -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js "></script>
+
+<script>
+  // Function to toggle RTL/LTR
+  function toggleDirection(input) {
+    const val = input.value.trim();
+    if (val.length === 0) return;
+
+    const firstChar = val[0];
+    const isArabic = /[\u0600-\u06FF]/.test(firstChar);
+
+    input.dir = isArabic ? 'rtl' : 'ltr';
+    input.style.textAlign = isArabic ? 'right' : 'left';
+  }
+
+  document.querySelectorAll("input[type='text'], input[type='tel']").forEach(input => {
+    input.addEventListener("input", () => toggleDirection(input));
+  });
+
+  // Show registration form page
+  function showRegistrationForm() {
+    document.getElementById("welcomePage").style.display = "none";
+    document.getElementById("registrationFormPage").style.display = "block";
+
+    // Update progress bar
+    document.getElementById("progressFill").style.width = "66%";
+  }
+
+  // Image Slider Logic
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('#imageSlider img');
+
+  function changeSlide() {
+    slides.forEach((slide) => slide.classList.remove('active'));
+    slides[currentSlide].classList.add('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+  }
+
+  setInterval(changeSlide, 5000); // Change every 5 seconds
+
+  // Sound on success
+  const successSound = new Audio('success-sound.mp3'); // Make sure this file exists
+
+  // Handling form submission
+  const form = document.getElementById("registrationForm");
+  const successPage = document.getElementById("successPage");
+
+  let customerList = [];
+  const storedData = localStorage.getItem("customerList");
+  if (storedData) {
+    try {
+      customerList = JSON.parse(storedData);
+    } catch (e) {}
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = {
+      الاسم: form.name.value.trim(),
+      المدينة: form.city.value.trim(),
+      "رقم الجوال": form.phone.value.trim(),
+      "رقم القسيمة": form.coupon.value.trim()
+    };
+
+    customerList.push(formData);
+    localStorage.setItem("customerList", JSON.stringify(customerList));
+
+    // Export to Excel
+    const ws = XLSX.utils.json_to_sheet(customerList);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "عملاء");
+    const fileName = "karim.xlsx";
+    XLSX.writeFile(wb, fileName);
+
+    // Switch to success page
+    document.getElementById("registrationFormPage").style.display = "none";
+    successPage.style.display = "block";
+
+    // Play sound
+    successSound.play();
+
+    // Update progress bar
+    document.getElementById("progressFill").style.width = "100%";
+  });
+</script>
+
+</body>
+</html>
